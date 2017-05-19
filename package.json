@@ -1,0 +1,17 @@
+{
+    "name":"geocodificacao",
+      "scripts": {
+        "start": "node app.js"
+    },
+    "version": "0.9.0",
+    "author": {
+        "name": "Carlos Alberto Noronha",
+        "email": "beto_noronha@live.com"
+    },
+    "description": "API que realiza a geocodificação de endereços em um banco de dados POSTGIS",
+    "dependencies": {
+        "express":"~4.15.2",
+        "body-parser": "~1.17.1",
+        "pg" : "~6.2.2"
+    }
+}
