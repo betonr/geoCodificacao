@@ -1,14 +1,14 @@
 [
     {
-        "name" : "Rua Serra Dourada",
-        "country" : "Altos de Santana",
+        "name" : "R. augusta",
+        "district" : "jardim",
         "number" : 25,
-        "year" : 1925
+        "year" : 1899
     }, 
     {
-        "name" : "Rua Serra Dourada",
-        "country" : "Altos de Santana",
-        "number" : 25,
-        "year" : 1925
+        "name" : "avenida teste",
+        "district" : "Jard. Telespark",
+        "number" : 200,
+        "year" : 1920
     }
 ]
