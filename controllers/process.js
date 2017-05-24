@@ -6,13 +6,33 @@ module.exports = function(app){
 
     app.post('/geocodifica/street', function(req, res){
         var ruas = req.body;
+
         //validação dos dados
 
-        for(var key in ruas){
-            var arrayStreet = new app.helpers.getStreet(ruas[key]);
-            
-            var point = new app.helpers.getPoint(arrayStreet);
+        var resTest = function(callback){
+            var plus = [];
+            var not = [];
+            var correctly = [];
+            for(var key in ruas){
+                new app.helpers.getStreet(ruas[key], function(err, resultado){
+
+                    if(err && err=='street not find') not.push(resultado);
+                    else if(err) plus.push(resultado);
+                    else {
+                        new app.helpers.getPoint(resultado, function(coordinates){
+                            if(coordinates) correctly.push(coordinates);
+                        }); 
+                    }
+                
+                });
+            }
+            callback(not, plus, correctly);
         }
+
+        resTest(function(not, plus, correctly){
+            console.log(correctly);
+            console.log(not);
+        });
 
     });
 

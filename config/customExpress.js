@@ -11,6 +11,7 @@ module.exports = function(){
     consign()
      .include('controllers')
      .then('helpers')
+     .then('externalApi')
      .into(app);
 
     return app;
