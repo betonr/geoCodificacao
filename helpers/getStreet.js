@@ -1,4 +1,4 @@
-function getStreet(street){
+function getStreet(street, callback){
 
     street.name = tratamento(street.name);
     street.district = tratamento(street.district);
@@ -10,17 +10,15 @@ function getStreet(street){
     
     crudDB.defalut(sql, function(err, resposta){
         if(err){
-            console.log('ERRO no SQL: ' + err);
-            return 500;
+            console.log('SQL error: ' + err);
+            callback(500);
+            return false;
         }else{
-            if(resposta.rowCount > 0) return resposta;
-            return -1;
+            if(resposta.rowCount > 1) callback({error: 'More than one result'}, {result: resposta.rows})
+            else if(resposta.rowCount > 0) callback(null,[resposta.rows, street.number]);
+            else callback({'error': 'street not find'}, {result: street});
         }
     });
-}
-
-getStreet.prototype.result = function(){
-     return 1;
 }
 
 function tratamento(string){
@@ -32,7 +30,7 @@ function tratamento(string){
 }
 
 function getSQL(street){
-    var res = "SELECT * FROM tb_ruas INNER JOIN tb_trechos ON tb_ruas.id=tb_trechos.id_rua WHERE ";
+    var res = "SELECT *, ST_astext(geom) as geometry FROM tb_ruas INNER JOIN tb_trechos ON tb_ruas.id=tb_trechos.id_rua WHERE ";
     
     var names = street.name.split(" ");
     for(var i in names) res+="LOWER(nome) LIKE '%"+names[i]+"%' AND ";
