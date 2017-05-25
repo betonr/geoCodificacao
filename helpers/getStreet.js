@@ -1,24 +1,30 @@
 function getStreet(street, callback){
 
-    street.name = tratamento(street.name);
-    street.district = tratamento(street.district);
+    if(!('name' in street)) callback({error: 'name is necessary'}, {result: resposta.rows});
+    else if (!('district' in street)) callback({error: 'district is necessary'}, {result: resposta.rows});
+    else if (!('year' in street)) callback({error: 'year is necessary'}, {result: resposta.rows});
+    else if (!('number' in street)) callback({error: 'number'}, {result: resposta.rows});
+    else{
+        street.name = tratamento(street.name);
+        street.district = tratamento(street.district);
 
-    var sql = getSQL(street);
+        var sql = getSQL(street);
 
-    var conn = app.helpers.database.connPostgres;
-    var crudDB = new app.helpers.database.crud(conn); 
-    
-    crudDB.defalut(sql, function(err, resposta){
-        if(err){
-            console.log('SQL error: ' + err);
-            callback(500);
-            return false;
-        }else{
-            if(resposta.rowCount > 1) callback({error: 'More than one result'}, {result: resposta.rows})
-            else if(resposta.rowCount > 0) callback(null,[resposta.rows, street.number]);
-            else callback({'error': 'street not find'}, {result: street});
-        }
-    });
+        var conn = app.helpers.database.connPostgres;
+        var crudDB = new app.helpers.database.crud(conn); 
+        
+        crudDB.defalut(sql, function(err, resposta){
+            if(err){
+                console.log('SQL error: ' + err);
+                callback(500);
+                return false;
+            }else{
+                if(resposta.rowCount > 1) callback({error: 'More than one result'}, {result: resposta.rows})
+                else if(resposta.rowCount > 0) callback(null,[resposta.rows, street.number]);
+                else callback({error: 'street not find'}, {result: street});
+            }
+        });
+    }
 }
 
 function tratamento(string){
